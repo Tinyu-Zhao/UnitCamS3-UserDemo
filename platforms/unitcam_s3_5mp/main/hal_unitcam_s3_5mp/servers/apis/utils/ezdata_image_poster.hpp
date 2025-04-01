@@ -15,34 +15,29 @@
 #include <HTTPClient.h>
 #include <functional>
 
-static const char* _server_host = "ezdata2.m5stack.com";
+static const char* _server_host    = "ezdata2.m5stack.com";
 static const uint16_t _server_port = 80;
 
-struct UploadData_t
-{
+struct UploadData_t {
     std::string string_buffer;
     std::string form_data_part_1;
     std::string form_data_part_2;
 };
 
-static bool ezdata_image_poster(std::string mac,
-                                std::string nickname,
-                                std::string timeZone,
+static bool ezdata_image_poster(std::string mac, std::string nickname, std::string timeZone,
                                 std::function<void(camera_fb_t* frameBuffer)> onCaptured = nullptr)
 {
     /* -------------------------------------------------------------------------- */
     /*                                   Capture                                  */
     /* -------------------------------------------------------------------------- */
     camera_fb_t* fb = NULL;
-    fb = esp_camera_fb_get();
-    if (!fb)
-    {
+    fb              = esp_camera_fb_get();
+    if (!fb) {
         spdlog::error("capture failed");
         return false;
     }
     spdlog::info("capture ok, size: {}x{} in {} bytes", fb->width, fb->height, fb->len);
-    if (onCaptured != nullptr)
-        onCaptured(fb);
+    if (onCaptured != nullptr) onCaptured(fb);
 
     /* -------------------------------------------------------------------------- */
     /*                                   Upload                                   */
@@ -54,16 +49,18 @@ static bool ezdata_image_poster(std::string mac,
     /* -------------------------------------------------------------------------- */
     data.form_data_part_1 = spdlog::fmt_lib::format(
         "\r\nContent-Type: multipart/form-data; "
-        "boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
+        "boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-"
+        "Disposition: "
         "form-data; name=\"dataType\"\r\n\r\nfile\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
-        "form-data; name=\"watermarkText\"\r\n\r\n{}\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
+        "form-data; "
+        "name=\"watermarkText\"\r\n\r\n{}\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
         "form-data; name=\"timeZoneId\"\r\n\r\n{}\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
         "form-data; name=\"name\"\r\n\r\ncaptured\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
         "form-data; name=\"permissions\"\r\n\r\n1\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
-        "form-data; name=\"value\"\r\n\r\ncaptured.jpg\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
+        "form-data; "
+        "name=\"value\"\r\n\r\ncaptured.jpg\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW\r\nContent-Disposition: "
         "form-data; name=\"file\"; filename=\"captured.jpg\"\r\nContent-Type: image/jpeg\r\n",
-        nickname,
-        timeZone);
+        nickname, timeZone);
 
     data.form_data_part_2 = spdlog::fmt_lib::format("\r\n------WebKitFormBoundary7MA4YWxkTrZu0gW--\r\n");
 
@@ -74,8 +71,7 @@ static bool ezdata_image_poster(std::string mac,
 
     // Connect server
     WiFiClient client;
-    if (!client.connect(_server_host, _server_port))
-    {
+    if (!client.connect(_server_host, _server_port)) {
         spdlog::error("connect to server failed");
         esp_camera_fb_return(fb);
         return false;
@@ -112,15 +108,11 @@ static bool ezdata_image_poster(std::string mac,
     /* -------------------------------- Part file ------------------------------- */
     // spdlog::info("send file");
     uint8_t* fb_buffer_index = fb->buf;
-    for (size_t i = 0; i < fb->len; i = i + 1024)
-    {
-        if (i + 1024 < fb->len)
-        {
+    for (size_t i = 0; i < fb->len; i = i + 1024) {
+        if (i + 1024 < fb->len) {
             client.write(fb_buffer_index, 1024);
             fb_buffer_index += 1024;
-        }
-        else if (fb->len % 1024 > 0)
-        {
+        } else if (fb->len % 1024 > 0) {
             size_t remainder = fb->len % 1024;
             client.write(fb_buffer_index, remainder);
         }
@@ -137,22 +129,23 @@ static bool ezdata_image_poster(std::string mac,
     spdlog::info("wait response..");
 
     // Expose response handler
-    class MyHttpClient : public HTTPClient
-    {
+    class MyHttpClient : public HTTPClient {
     public:
-        int myHandleHeaderResponse() { return HTTPClient::handleHeaderResponse(); }
+        int myHandleHeaderResponse()
+        {
+            return HTTPClient::handleHeaderResponse();
+        }
     };
     MyHttpClient http;
     http.begin(client, "");
 
     // Wait and parse response
     HAL::FeedTheDog();
-    auto status_code = http.myHandleHeaderResponse();
+    auto status_code   = http.myHandleHeaderResponse();
     data.string_buffer = http.getString().c_str();
     spdlog::info("get code: {}\npayload:\n {}", status_code, data.string_buffer);
 
-    if (status_code != 200)
-    {
+    if (status_code != 200) {
         spdlog::warn("bad response in code: {}", status_code);
         // return false;
     }

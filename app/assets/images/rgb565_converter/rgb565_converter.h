@@ -15,8 +15,7 @@
 #include <cstddef>
 
 // 返回值表示错误代码
-enum class ImageConversionError
-{
+enum class ImageConversionError {
     Success = 0,
     FileNotFound,
     NotAPNG,
@@ -26,15 +25,20 @@ enum class ImageConversionError
     ConversionError,
 };
 
-class PNGImage
-{
+class PNGImage {
 public:
     PNGImage(const char* filename);
     ~PNGImage();
     ImageConversionError load();
     size_t convertToR5G6B5(uint16_t* outputArray);
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
+    int getWidth() const
+    {
+        return width;
+    }
+    int getHeight() const
+    {
+        return height;
+    }
 
 private:
     const char* filename;
@@ -49,7 +53,7 @@ private:
 };
 
 // API function to convert PNG to R5G6B5
-ImageConversionError
-convertPNGToR5G6B5(const char* inputFilePath, uint16_t* outputArray, size_t* outputLength, int* width, int* height);
+ImageConversionError convertPNGToR5G6B5(const char* inputFilePath, uint16_t* outputArray, size_t* outputLength,
+                                        int* width, int* height);
 
 #endif

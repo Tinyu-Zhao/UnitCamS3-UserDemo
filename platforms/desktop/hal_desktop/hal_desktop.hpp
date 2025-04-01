@@ -20,8 +20,7 @@
 #include <vector>
 #include <random>
 
-class HAL_Desktop : public HAL
-{
+class HAL_Desktop : public HAL {
 private:
     int _screenWidth;
     int _screenHeight;
@@ -38,7 +37,7 @@ public:
 
     HAL_Desktop(int screenWidth = 240, int screenHeight = 240, bool factoryTest = false)
     {
-        _screenWidth = screenWidth;
+        _screenWidth  = screenWidth;
         _screenHeight = screenHeight;
         _factory_test = factoryTest;
     }
@@ -53,8 +52,7 @@ public:
         _data.canvas = new LGFX_SpriteFx(_data.display);
         _data.canvas->createSprite(_data.display->width(), _data.display->height());
 
-        if (_factory_test)
-        {
+        if (_factory_test) {
             _data.unit_oled = new LGFX(128, 64);
             _data.unit_oled->init();
             _data.unit_oled->setColorDepth(1);
@@ -69,7 +67,7 @@ public:
         // this->popFatalError("404 not found\nasdasd asdfasf");
 
         _data.config.wifiSsid = "114514";
-        _data.config.wifiPass= "1919810";
+        _data.config.wifiPass = "1919810";
 
         // Add key mapping
         auto panel = (lgfx::Panel_sdl*)_data.display->getPanel();
@@ -80,7 +78,10 @@ public:
         // panel->addKeyCodeMapping(SDLK_f, 4);
     }
 
-    void canvasUpdate() override { GetCanvas()->pushSprite(0, 0); }
+    void canvasUpdate() override
+    {
+        GetCanvas()->pushSprite(0, 0);
+    }
 
     bool getButton(GAMEPAD::GamePadButton_t button) override
     {
@@ -171,8 +172,8 @@ public:
     OTA_UPGRADE::OtaInfo_t getLatestFirmwareInfoViaOta(OnLogPageRenderCallback_t onLogPageRender) override
     {
         OTA_UPGRADE::OtaInfo_t info;
-        info.firmwareUrl = "www.114514.com";
-        info.latestVersion = "V6.6.6";
+        info.firmwareUrl      = "www.114514.com";
+        info.latestVersion    = "V6.6.6";
         info.upgradeAvailable = true;
         return info;
     }
@@ -185,8 +186,7 @@ public:
         onLogPageRender(" upgrading..\n", true, false);
         delay(200);
 
-        for (int i = 0; i < 100; i += 5)
-        {
+        for (int i = 0; i < 100; i += 5) {
             std::string log = "<PB>";
             log += std::to_string(i);
             log += "\n";

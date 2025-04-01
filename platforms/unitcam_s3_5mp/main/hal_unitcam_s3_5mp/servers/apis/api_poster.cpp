@@ -25,8 +25,8 @@ using namespace SYSTEM::INPUTS;
 static void _task_image_poster(void* param)
 {
     uint32_t post_time_count = 0;
-    int post_count_down = HAL::GetSystemConfig().postInterval;
-    bool start_post = true;
+    int post_count_down      = HAL::GetSystemConfig().postInterval;
+    bool start_post          = true;
 
     // Get mac
     std::string mac;
@@ -34,27 +34,18 @@ static void _task_image_poster(void* param)
         uint8_t mac_buffer[6];
         char macStr[18] = {0};
         esp_wifi_get_mac((wifi_interface_t)ESP_IF_WIFI_STA, mac_buffer);
-        sprintf(macStr,
-                "%02X%02X%02X%02X%02X%02X",
-                mac_buffer[0],
-                mac_buffer[1],
-                mac_buffer[2],
-                mac_buffer[3],
-                mac_buffer[4],
-                mac_buffer[5]);
+        sprintf(macStr, "%02X%02X%02X%02X%02X%02X", mac_buffer[0], mac_buffer[1], mac_buffer[2], mac_buffer[3],
+                mac_buffer[4], mac_buffer[5]);
         mac = macStr;
     }
     spdlog::info("get mac: {}", mac);
 
-    while (1)
-    {
+    while (1) {
         delay(100);
 
         // Count down every seconds
-        if (millis() - post_time_count > 1000)
-        {
-            if (start_post)
-            {
+        if (millis() - post_time_count > 1000) {
+            if (start_post) {
                 start_post = false;
 
                 // Update led state
@@ -62,13 +53,12 @@ static void _task_image_poster(void* param)
 
                 // Start posting
                 spdlog::info("start posting..");
-                if (!ezdata_image_poster(
-                        mac, HAL::GetSystemConfig().nickname, HAL::GetSystemConfig().timeZone, [](camera_fb_t* frameBuffer) {
-                            // Save on every captured
-                            if (HAL::IsSdCardVaild())
-                                HAL::SaveImage(frameBuffer->buf, frameBuffer->len);
-                        }))
-                {
+                if (!ezdata_image_poster(mac, HAL::GetSystemConfig().nickname, HAL::GetSystemConfig().timeZone,
+                                         [](camera_fb_t* frameBuffer) {
+                                             // Save on every captured
+                                             if (HAL::IsSdCardVaild())
+                                                 HAL::SaveImage(frameBuffer->buf, frameBuffer->len);
+                                         })) {
                     // If failed
                     spdlog::error("post failed, try reboot..");
                     // Pass AP waiting
@@ -89,8 +79,7 @@ static void _task_image_poster(void* param)
 
             // Count down
             post_count_down--;
-            if (post_count_down <= 0)
-                start_post = true;
+            if (post_count_down <= 0) start_post = true;
 
             // spdlog::info("post count down: {}", post_count_down);
             post_time_count = millis();
@@ -98,13 +87,12 @@ static void _task_image_poster(void* param)
 
         // If button 0 pressed
         Button::Update();
-        if (Button::A()->wasClicked())
-        {
+        if (Button::A()->wasClicked()) {
             spdlog::info("g0 pressed, reset");
 
             // Reset
             CONFIG::SystemConfig_t default_config;
-            HAL::GetSystemConfig() = default_config;
+            HAL::GetSystemConfig()          = default_config;
             HAL::GetSystemConfig().wifiSsid = "";
             HAL::GetSystemConfig().wifiPass = "";
             HAL::SaveSystemConfig();
@@ -138,7 +126,10 @@ void startPoster(AsyncWebServerRequest* request)
     request->send(200, "application/json", "{\"msg\":\"ok\"}");
 }
 
-void load_poster_apis(AsyncWebServer& server) { server.on("/api/v1/start_poster", HTTP_GET, startPoster); }
+void load_poster_apis(AsyncWebServer& server)
+{
+    server.on("/api/v1/start_poster", HTTP_GET, startPoster);
+}
 
 void start_poster_task()
 {

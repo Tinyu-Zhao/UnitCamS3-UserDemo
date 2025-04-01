@@ -23,8 +23,7 @@
  * 2) Use HAL::Inject() to inject your hal
  * 3) Use HAL:Get() to get this hal wherever you want
  */
-class HAL
-{
+class HAL {
 private:
     static HAL* _hal;
 
@@ -64,26 +63,43 @@ public:
      *
      */
 public:
-    HAL() {}
-    virtual ~HAL() {}
+    HAL()
+    {
+    }
+    virtual ~HAL()
+    {
+    }
 
-    static std::string Type() { return Get()->type(); }
-    virtual std::string type() { return "Base"; }
+    static std::string Type()
+    {
+        return Get()->type();
+    }
+    virtual std::string type()
+    {
+        return "Base";
+    }
 
-    static std::string CompileDate() { return Get()->compileDate(); }
-    virtual std::string compileDate() { return __DATE__; }
+    static std::string CompileDate()
+    {
+        return Get()->compileDate();
+    }
+    virtual std::string compileDate()
+    {
+        return __DATE__;
+    }
 
-    virtual void init() {}
+    virtual void init()
+    {
+    }
 
     /**
      * @brief Components
      *
      */
 protected:
-    struct Data_t
-    {
-        LGFX_Device* display = nullptr;
-        LGFX_SpriteFx* canvas = nullptr;
+    struct Data_t {
+        LGFX_Device* display   = nullptr;
+        LGFX_SpriteFx* canvas  = nullptr;
         LGFX_Device* unit_oled = nullptr;
         time_t time_buffer;
         CONFIG::SystemConfig_t config;
@@ -100,29 +116,47 @@ public:
      *
      * @return LGFX_Device*
      */
-    static LGFX_Device* GetDisplay() { return Get()->_data.display; }
+    static LGFX_Device* GetDisplay()
+    {
+        return Get()->_data.display;
+    }
 
     /**
      * @brief Full screen canvas (sprite)
      *
      * @return LGFX_SpriteFx*
      */
-    static LGFX_SpriteFx* GetCanvas() { return Get()->_data.canvas; }
+    static LGFX_SpriteFx* GetCanvas()
+    {
+        return Get()->_data.canvas;
+    }
 
-    static LGFX_Device* GetUnitOled() { return Get()->_data.unit_oled; }
+    static LGFX_Device* GetUnitOled()
+    {
+        return Get()->_data.unit_oled;
+    }
 
     /**
      * @brief Push framebuffer
      *
      */
-    static void CanvasUpdate() { Get()->canvasUpdate(); }
-    virtual void canvasUpdate() { GetCanvas()->pushSprite(0, 0); }
+    static void CanvasUpdate()
+    {
+        Get()->canvasUpdate();
+    }
+    virtual void canvasUpdate()
+    {
+        GetCanvas()->pushSprite(0, 0);
+    }
 
     /**
      * @brief Render fps panel
      *
      */
-    static void RenderFpsPanel() { Get()->renderFpsPanel(); }
+    static void RenderFpsPanel()
+    {
+        Get()->renderFpsPanel();
+    }
     virtual void renderFpsPanel();
 
     /**
@@ -130,7 +164,10 @@ public:
      *
      * @param msg
      */
-    static void PopFatalError(std::string msg) { Get()->popFatalError(msg); }
+    static void PopFatalError(std::string msg)
+    {
+        Get()->popFatalError(msg);
+    }
     virtual void popFatalError(std::string msg);
 
     /**
@@ -138,7 +175,10 @@ public:
      *
      * @param msg
      */
-    static void PopWarning(std::string msg) { Get()->popWarning(msg); }
+    static void PopWarning(std::string msg)
+    {
+        Get()->popWarning(msg);
+    }
     virtual void popWarning(std::string msg);
 
     /**
@@ -146,21 +186,41 @@ public:
      *
      * @param msg
      */
-    static void PopSuccess(std::string msg, bool showSuccessLabel = true) { Get()->popSuccess(msg, showSuccessLabel); }
+    static void PopSuccess(std::string msg, bool showSuccessLabel = true)
+    {
+        Get()->popSuccess(msg, showSuccessLabel);
+    }
     virtual void popSuccess(std::string msg, bool showSuccessLabel = true);
 
     /* -------------------------------------------------------------------------- */
     /*                                    Lvgl                                    */
     /* -------------------------------------------------------------------------- */
 public:
-    static bool LvglInit() { return Get()->lvglInit(); }
-    virtual bool lvglInit() { return false; }
+    static bool LvglInit()
+    {
+        return Get()->lvglInit();
+    }
+    virtual bool lvglInit()
+    {
+        return false;
+    }
 
-    static bool LvglDeinit() { return Get()->lvglDeinit(); }
-    virtual bool lvglDeinit() { return false; }
+    static bool LvglDeinit()
+    {
+        return Get()->lvglDeinit();
+    }
+    virtual bool lvglDeinit()
+    {
+        return false;
+    }
 
-    static void LvglTimerHandler() { Get()->lvglTimerHandler(); }
-    virtual void lvglTimerHandler() {}
+    static void LvglTimerHandler()
+    {
+        Get()->lvglTimerHandler();
+    }
+    virtual void lvglTimerHandler()
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                   System                                   */
@@ -171,53 +231,88 @@ public:
      *
      * @param milliseconds
      */
-    static void Delay(unsigned long milliseconds) { Get()->delay(milliseconds); }
-    virtual void delay(unsigned long milliseconds) { lgfx::delay(milliseconds); }
+    static void Delay(unsigned long milliseconds)
+    {
+        Get()->delay(milliseconds);
+    }
+    virtual void delay(unsigned long milliseconds)
+    {
+        lgfx::delay(milliseconds);
+    }
 
     /**
      * @brief Get the number of milliseconds passed since boot
      *
      * @return unsigned long
      */
-    static unsigned long Millis() { return Get()->millis(); }
-    virtual unsigned long millis() { return lgfx::millis(); }
+    static unsigned long Millis()
+    {
+        return Get()->millis();
+    }
+    virtual unsigned long millis()
+    {
+        return lgfx::millis();
+    }
 
     /**
      * @brief Power off
      *
      */
-    static void PowerOff() { Get()->powerOff(); }
-    virtual void powerOff() {}
+    static void PowerOff()
+    {
+        Get()->powerOff();
+    }
+    virtual void powerOff()
+    {
+    }
 
     /**
      * @brief Reboot
      *
      */
-    static void Reboot() { Get()->reboot(); }
-    virtual void reboot() {}
+    static void Reboot()
+    {
+        Get()->reboot();
+    }
+    virtual void reboot()
+    {
+    }
 
     /**
      * @brief Set RTC time
      *
      * @param dateTime
      */
-    static void SetSystemTime(tm dateTime) { return Get()->setSystemTime(dateTime); }
-    virtual void setSystemTime(tm dateTime) {}
+    static void SetSystemTime(tm dateTime)
+    {
+        return Get()->setSystemTime(dateTime);
+    }
+    virtual void setSystemTime(tm dateTime)
+    {
+    }
 
     /**
      * @brief Get local time(wrap of localtime())
      *
      * @return tm*
      */
-    static tm* GetLocalTime() { return Get()->getLocalTime(); }
+    static tm* GetLocalTime()
+    {
+        return Get()->getLocalTime();
+    }
     virtual tm* getLocalTime();
 
     /**
      * @brief Reset system watch dog
      *
      */
-    static void FeedTheDog() { Get()->feedTheDog(); }
-    virtual void feedTheDog() {}
+    static void FeedTheDog()
+    {
+        Get()->feedTheDog();
+    }
+    virtual void feedTheDog()
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                     MSC                                    */
@@ -227,15 +322,25 @@ public:
      * @brief Start MSC mode to expose fs as a USB disk
      *
      */
-    static void StartMscMode() { Get()->startMscMode(); }
-    virtual void startMscMode() {}
+    static void StartMscMode()
+    {
+        Get()->startMscMode();
+    }
+    virtual void startMscMode()
+    {
+    }
 
     /**
      * @brief Stop MSC mode
      *
      */
-    static void StopMscMode() { Get()->stopMscMode(); }
-    virtual void stopMscMode() {}
+    static void StopMscMode()
+    {
+        Get()->stopMscMode();
+    }
+    virtual void stopMscMode()
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                System config                               */
@@ -245,36 +350,57 @@ public:
      * @brief Load system config from fs
      *
      */
-    static void LoadSystemConfig() { Get()->loadSystemConfig(); }
-    virtual void loadSystemConfig() {}
+    static void LoadSystemConfig()
+    {
+        Get()->loadSystemConfig();
+    }
+    virtual void loadSystemConfig()
+    {
+    }
 
     /**
      * @brief Save system config to fs
      *
      */
-    static void SaveSystemConfig() { Get()->saveSystemConfig(); }
-    virtual void saveSystemConfig() {}
+    static void SaveSystemConfig()
+    {
+        Get()->saveSystemConfig();
+    }
+    virtual void saveSystemConfig()
+    {
+    }
 
     /**
      * @brief Get system config
      *
      * @return CONFIG::SystemConfig_t&
      */
-    static CONFIG::SystemConfig_t& GetSystemConfig() { return Get()->_data.config; }
+    static CONFIG::SystemConfig_t& GetSystemConfig()
+    {
+        return Get()->_data.config;
+    }
 
     /**
      * @brief Set system config
      *
      * @param cfg
      */
-    static void SetSystemConfig(CONFIG::SystemConfig_t cfg) { Get()->_data.config = cfg; }
+    static void SetSystemConfig(CONFIG::SystemConfig_t cfg)
+    {
+        Get()->_data.config = cfg;
+    }
 
     /**
      * @brief Apply system config to device
      *
      */
-    static void ApplySystemConfig() { Get()->applySystemConfig(); }
-    virtual void applySystemConfig() {}
+    static void ApplySystemConfig()
+    {
+        Get()->applySystemConfig();
+    }
+    virtual void applySystemConfig()
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                   Buzzer                                   */
@@ -286,15 +412,25 @@ public:
      * @param frequency
      * @param duration
      */
-    static void Beep(float frequency, uint32_t duration = 4294967295U) { Get()->beep(frequency, duration); }
-    virtual void beep(float frequency, uint32_t duration) {}
+    static void Beep(float frequency, uint32_t duration = 4294967295U)
+    {
+        Get()->beep(frequency, duration);
+    }
+    virtual void beep(float frequency, uint32_t duration)
+    {
+    }
 
     /**
      * @brief Stop buzzer beep
      *
      */
-    static void BeepStop() { Get()->beepStop(); }
-    virtual void beepStop() {}
+    static void BeepStop()
+    {
+        Get()->beepStop();
+    }
+    virtual void beepStop()
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                   Gamepad                                  */
@@ -307,8 +443,14 @@ public:
      * @return true Pressing, 按下
      * @return false Released, 松开
      */
-    static bool GetButton(GAMEPAD::GamePadButton_t button) { return Get()->getButton(button); }
-    virtual bool getButton(GAMEPAD::GamePadButton_t button) { return false; }
+    static bool GetButton(GAMEPAD::GamePadButton_t button)
+    {
+        return Get()->getButton(button);
+    }
+    virtual bool getButton(GAMEPAD::GamePadButton_t button)
+    {
+        return false;
+    }
 
     /**
      * @brief Get any button state, 获取任意按键状态
@@ -316,7 +458,10 @@ public:
      * @return true Pressing, 按下
      * @return false Released, 松开
      */
-    static bool GetAnyButton() { return Get()->getAnyButton(); }
+    static bool GetAnyButton()
+    {
+        return Get()->getAnyButton();
+    }
     virtual bool getAnyButton();
 
     /* -------------------------------------------------------------------------- */
@@ -327,23 +472,39 @@ public:
      * @brief Update encoder count
      *
      */
-    static void UpdateEncoderCount() { Get()->updateEncoderCount(); }
-    virtual void updateEncoderCount() {}
+    static void UpdateEncoderCount()
+    {
+        Get()->updateEncoderCount();
+    }
+    virtual void updateEncoderCount()
+    {
+    }
 
     /**
      * @brief Get encoder count
      *
      * @return int
      */
-    static int GetEncoderCount() { return Get()->getEncoderCount(); }
-    virtual int getEncoderCount() { return 0; }
+    static int GetEncoderCount()
+    {
+        return Get()->getEncoderCount();
+    }
+    virtual int getEncoderCount()
+    {
+        return 0;
+    }
 
     /**
      * @brief Reset encoder count
      *
      */
-    static void ResetEncoderCount(int value = 0) { Get()->resetEncoderCount(value); }
-    virtual void resetEncoderCount(int value) {}
+    static void ResetEncoderCount(int value = 0)
+    {
+        Get()->resetEncoderCount(value);
+    }
+    virtual void resetEncoderCount(int value)
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                  Touchpad                                  */
@@ -353,49 +514,89 @@ public:
      * @brief Update touch
      *
      */
-    static void UpdateTouch() { Get()->updateTouch(); }
-    virtual void updateTouch() {}
+    static void UpdateTouch()
+    {
+        Get()->updateTouch();
+    }
+    virtual void updateTouch()
+    {
+    }
 
     /**
      * @brief Is touching
      *
      * @return int
      */
-    static int IsTouching() { return Get()->isTouching(); }
-    virtual bool isTouching() { return false; }
+    static int IsTouching()
+    {
+        return Get()->isTouching();
+    }
+    virtual bool isTouching()
+    {
+        return false;
+    }
 
     /**
      * @brief Get touch point
      *
      * @return TOUCH::Point_t
      */
-    static TOUCH::Point_t GetTouchPoint() { return Get()->getTouchPoint(); }
-    virtual TOUCH::Point_t getTouchPoint() { return {-1, -1}; }
+    static TOUCH::Point_t GetTouchPoint()
+    {
+        return Get()->getTouchPoint();
+    }
+    virtual TOUCH::Point_t getTouchPoint()
+    {
+        return {-1, -1};
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                     IMU                                    */
     /* -------------------------------------------------------------------------- */
 public:
-    static bool IsImuAvailable() { return Get()->isImuAvailable(); }
-    virtual bool isImuAvailable() { return false; }
+    static bool IsImuAvailable()
+    {
+        return Get()->isImuAvailable();
+    }
+    virtual bool isImuAvailable()
+    {
+        return false;
+    }
 
-    static bool IsImuMagAvailable() { return Get()->isImuMagAvailable(); }
-    virtual bool isImuMagAvailable() { return false; }
+    static bool IsImuMagAvailable()
+    {
+        return Get()->isImuMagAvailable();
+    }
+    virtual bool isImuMagAvailable()
+    {
+        return false;
+    }
 
     /**
      * @brief Update IMU data, 刷新IMU数据
      *
      */
-    static void UpdateImuData() { Get()->updateImuData(); }
-    virtual void updateImuData() {}
+    static void UpdateImuData()
+    {
+        Get()->updateImuData();
+    }
+    virtual void updateImuData()
+    {
+    }
 
     /**
      * @brief Get the Imu Data, 获取IMU数据
      *
      * @return const IMU::ImuData_t&
      */
-    static const IMU::ImuData_t& GetImuData() { return Get()->getImuData(); }
-    const IMU::ImuData_t& getImuData() { return _data.imu_data; }
+    static const IMU::ImuData_t& GetImuData()
+    {
+        return Get()->getImuData();
+    }
+    const IMU::ImuData_t& getImuData()
+    {
+        return _data.imu_data;
+    }
 
     /**
      * @brief Get the Imu Interrupt State object
@@ -403,21 +604,33 @@ public:
      * @return true triggered
      * @return false
      */
-    static bool GetImuInterruptState() { return Get()->getImuInterruptState(); }
-    virtual bool getImuInterruptState() { return false; }
+    static bool GetImuInterruptState()
+    {
+        return Get()->getImuInterruptState();
+    }
+    virtual bool getImuInterruptState()
+    {
+        return false;
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                   Network                                  */
     /* -------------------------------------------------------------------------- */
 public:
-    static bool CheckWifiConfig() { return Get()->checkWifiConfig(); }
+    static bool CheckWifiConfig()
+    {
+        return Get()->checkWifiConfig();
+    }
     virtual bool checkWifiConfig();
 
     static bool ConnectWifi(OnLogPageRenderCallback_t onLogPageRender, bool reconnect = false)
     {
         return Get()->connectWifi(onLogPageRender, reconnect);
     }
-    virtual bool connectWifi(OnLogPageRenderCallback_t onLogPageRender, bool reconnect) { return false; }
+    virtual bool connectWifi(OnLogPageRenderCallback_t onLogPageRender, bool reconnect)
+    {
+        return false;
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                     OTA                                    */
@@ -445,39 +658,89 @@ public:
     /*                                     Led                                    */
     /* -------------------------------------------------------------------------- */
 public:
-    static void SetLedState(bool state) { Get()->setLedState(state); }
-    virtual void setLedState(bool state) {}
+    static void SetLedState(bool state)
+    {
+        Get()->setLedState(state);
+    }
+    virtual void setLedState(bool state)
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                   Server                                   */
     /* -------------------------------------------------------------------------- */
 public:
-    static void StartApServer() { Get()->startApServer(); }
-    virtual void startApServer() {}
+    static void StartApServer()
+    {
+        Get()->startApServer();
+    }
+    virtual void startApServer()
+    {
+    }
 
-    static void StopApServer() { Get()->stopApServer(); }
-    virtual void stopApServer() {}
+    static void StopApServer()
+    {
+        Get()->stopApServer();
+    }
+    virtual void stopApServer()
+    {
+    }
 
-    static void StartPosterServer() { Get()->startPosterServer(); }
-    virtual void startPosterServer() {}
+    static void StartPosterServer()
+    {
+        Get()->startPosterServer();
+    }
+    virtual void startPosterServer()
+    {
+    }
 
     /* -------------------------------------------------------------------------- */
     /*                                     SD                                     */
     /* -------------------------------------------------------------------------- */
 public:
-    static std::string GetSdCardInfo() { return Get()->getSdCardInfo(); }
-    virtual std::string getSdCardInfo() { return ""; }
+    static std::string GetSdCardInfo()
+    {
+        return Get()->getSdCardInfo();
+    }
+    virtual std::string getSdCardInfo()
+    {
+        return "";
+    }
 
     // For poster mode
-    static bool SdCardInit(bool passImagePath) { return Get()->sdCardInit(passImagePath); }
-    virtual bool sdCardInit(bool passImagePath) { return false; }
+    static bool SdCardInit(bool passImagePath)
+    {
+        return Get()->sdCardInit(passImagePath);
+    }
+    virtual bool sdCardInit(bool passImagePath)
+    {
+        return false;
+    }
 
-    static bool SdCardDeInit() { return Get()->sdCardDeInit(); }
-    virtual bool sdCardDeInit() { return false; }
+    static bool SdCardDeInit()
+    {
+        return Get()->sdCardDeInit();
+    }
+    virtual bool sdCardDeInit()
+    {
+        return false;
+    }
 
-    static bool IsSdCardVaild() { return Get()->isSdCardVaild(); }
-    virtual bool isSdCardVaild() { return false; }
+    static bool IsSdCardVaild()
+    {
+        return Get()->isSdCardVaild();
+    }
+    virtual bool isSdCardVaild()
+    {
+        return false;
+    }
 
-    static bool SaveImage(uint8_t* img, size_t size) { return Get()->saveImage(img, size); }
-    virtual bool saveImage(uint8_t* img, size_t size) { return false; }
+    static bool SaveImage(uint8_t* img, size_t size)
+    {
+        return Get()->saveImage(img, size);
+    }
+    virtual bool saveImage(uint8_t* img, size_t size)
+    {
+        return false;
+    }
 };

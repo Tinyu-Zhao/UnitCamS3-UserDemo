@@ -18,12 +18,10 @@
 /* -------------------------------------------------------------------------- */
 #define APP_VERSION "V0.1"
 
-namespace SHARED_DATA
-{
-    struct SharedData_t
-    {
-        // Add your shared data here
-        // int shitNum = 114514;
-        // ...
-    };
-} // namespace SHARED_DATA
+namespace SHARED_DATA {
+struct SharedData_t {
+    // Add your shared data here
+    // int shitNum = 114514;
+    // ...
+};
+}  // namespace SHARED_DATA

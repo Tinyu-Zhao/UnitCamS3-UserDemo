@@ -16,10 +16,11 @@
  * @brief Add apis to fill shape layer in difference mode
  *
  */
-class LGFX_SpriteFx : public LGFX_Sprite
-{
+class LGFX_SpriteFx : public LGFX_Sprite {
 public:
-    LGFX_SpriteFx(LovyanGFX* parent) : LGFX_Sprite(parent) {}
+    LGFX_SpriteFx(LovyanGFX* parent) : LGFX_Sprite(parent)
+    {
+    }
 
     void drawFastHLineInDifference(int32_t x, int32_t y, int32_t w);
     void fillRectInDifference(int32_t x, int32_t y, int32_t w, int32_t h);

@@ -20,13 +20,11 @@ static uint8_t _dog = 0;
 static std::mutex _feed_mutex;
 static void _daemon_watch_dog(void* param)
 {
-    while (1)
-    {
+    while (1) {
         vTaskDelay(pdMS_TO_TICKS(1000));
         _feed_mutex.lock();
         _dog++;
-        if (_dog > 6)
-        {
+        if (_dog > 6) {
             spdlog::error(":(");
             spdlog::error("watch dog timeout");
             spdlog::error("rebooting..");

@@ -23,8 +23,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                  Text pool                                 */
 /* -------------------------------------------------------------------------- */
-struct TextPool_t
-{
+struct TextPool_t {
     // TextPool_en_t TextEN;
     // TextPool_cn_t TextCN;
     // TextPool_jp_t TextJP;

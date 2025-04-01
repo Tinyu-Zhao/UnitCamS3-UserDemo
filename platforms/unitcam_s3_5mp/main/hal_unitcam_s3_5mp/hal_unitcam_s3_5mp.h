@@ -11,8 +11,7 @@
 #include <hal/hal.h>
 #include <Arduino.h>
 
-class HAL_UnitCamS3_5MP : public HAL
-{
+class HAL_UnitCamS3_5MP : public HAL {
 private:
     void _watch_dog_init();
     void _gamepad_init();
@@ -22,7 +21,10 @@ private:
     void _mic_init();
 
 public:
-    std::string type() override { return "UnitCamS3-5MP"; }
+    std::string type() override
+    {
+        return "UnitCamS3-5MP";
+    }
 
     inline void init() override
     {

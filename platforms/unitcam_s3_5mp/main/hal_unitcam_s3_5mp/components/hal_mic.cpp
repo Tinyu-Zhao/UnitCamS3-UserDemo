@@ -16,7 +16,10 @@
 #include <utility/Mic_Class.hpp>
 
 static m5::Mic_Class* _mic = nullptr;
-m5::Mic_Class* __get_mic() { return _mic; }
+m5::Mic_Class* __get_mic()
+{
+    return _mic;
+}
 
 void HAL_UnitCamS3_5MP::_mic_init()
 {
@@ -24,10 +27,10 @@ void HAL_UnitCamS3_5MP::_mic_init()
 
     assert(_mic == nullptr);
 
-    _mic = new m5::Mic_Class;
-    auto mic_config = _mic->config();
-    mic_config.pin_data_in = HAL_PIN_MIC_DATA;
-    mic_config.pin_ws = HAL_PIN_MIC_CLK;
+    _mic                     = new m5::Mic_Class;
+    auto mic_config          = _mic->config();
+    mic_config.pin_data_in   = HAL_PIN_MIC_DATA;
+    mic_config.pin_ws        = HAL_PIN_MIC_CLK;
     mic_config.task_priority = 5;
     mic_config.magnification = 16;
     // mic_config.noise_filter_level = 1;
@@ -36,8 +39,7 @@ void HAL_UnitCamS3_5MP::_mic_init()
     // mic_config.sample_rate = 48000;
     _mic->config(mic_config);
     _mic->begin();
-    if (!_mic->begin())
-    {
+    if (!_mic->begin()) {
         popFatalError("mic init failed");
     }
     spdlog::info("ok");

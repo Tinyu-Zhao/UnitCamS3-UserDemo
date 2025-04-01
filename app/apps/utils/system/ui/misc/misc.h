@@ -13,9 +13,7 @@
 #include <functional>
 #include <string>
 
-namespace SYSTEM
-{
-    namespace UI
-    {
-    } // namespace UI
-} // namespace SYSTEM
+namespace SYSTEM {
+namespace UI {
+}  // namespace UI
+}  // namespace SYSTEM

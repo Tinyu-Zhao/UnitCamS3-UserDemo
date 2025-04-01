@@ -33,4 +33,7 @@ void setup()
     APP::Setup(callback);
 }
 
-void loop() { APP::Loop(); }
+void loop()
+{
+    APP::Loop();
+}

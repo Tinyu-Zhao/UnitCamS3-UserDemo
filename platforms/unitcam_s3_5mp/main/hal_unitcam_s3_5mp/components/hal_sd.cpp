@@ -33,38 +33,29 @@ std::string HAL_UnitCamS3_5MP::getSdCardInfo()
 
     // Better card compatibility?
     uint8_t pin_map[] = {HAL_PIN_SD_CLK, HAL_PIN_SD_MISO, HAL_PIN_SD_MOSI};
-    for (auto& i : pin_map)
-    {
+    for (auto& i : pin_map) {
         gpio_set_drive_capability((gpio_num_t)i, GPIO_DRIVE_CAP_3);
     }
 
     // Init sd
     bool ret = SD.begin(HAL_PIN_SD_CS, SPI, 10000000);
-    if (!ret)
-    {
+    if (!ret) {
         spdlog::error("sd begin failed");
         card_info += "SD Card Not Valid";
-    }
-    else
-    {
+    } else {
         spdlog::info("sd begin ok");
 
         card_info += "Type: ";
 
         // Get card info
         uint8_t cardType = SD.cardType();
-        if (cardType == CARD_MMC)
-        {
+        if (cardType == CARD_MMC) {
             card_info += "MMC ";
             spdlog::info("MMC");
-        }
-        else if (cardType == CARD_SD)
-        {
+        } else if (cardType == CARD_SD) {
             card_info += "SDSC ";
             spdlog::info("SDSC");
-        }
-        else if (cardType == CARD_SDHC)
-        {
+        } else if (cardType == CARD_SDHC) {
             card_info += "SDHC ";
             spdlog::info("SDHC");
         }
@@ -87,11 +78,10 @@ std::string HAL_UnitCamS3_5MP::getSdCardInfo()
 
 static bool _is_sd_card_vaild = false;
 
-struct ImageSavePath_t
-{
+struct ImageSavePath_t {
 public:
-    const String path = "/captured";
-    const String prefix = "img_";
+    const String path      = "/captured";
+    const String prefix    = "img_";
     const String extension = ".jpeg";
 
 private:
@@ -99,11 +89,22 @@ private:
     uint32_t _image_num;
 
 public:
-    ImageSavePath_t() : _image_num(0) {}
+    ImageSavePath_t() : _image_num(0)
+    {
+    }
 
-    void setImageNum(uint32_t imgNum) { _image_num = imgNum; }
-    uint32_t getImageNum() { return _image_num; }
-    void nextImage() { _image_num++; }
+    void setImageNum(uint32_t imgNum)
+    {
+        _image_num = imgNum;
+    }
+    uint32_t getImageNum()
+    {
+        return _image_num;
+    }
+    void nextImage()
+    {
+        _image_num++;
+    }
 
     const String& getSavePath()
     {
@@ -129,13 +130,11 @@ bool HAL_UnitCamS3_5MP::sdCardInit(bool passImagePath)
 
     // Better card compatibility?
     uint8_t pin_map[] = {HAL_PIN_SD_CLK, HAL_PIN_SD_MISO, HAL_PIN_SD_MOSI};
-    for (auto& i : pin_map)
-    {
+    for (auto& i : pin_map) {
         gpio_set_drive_capability((gpio_num_t)i, GPIO_DRIVE_CAP_3);
     }
 
-    if (!SD.begin(HAL_PIN_SD_CS, SPI, 10000000))
-    {
+    if (!SD.begin(HAL_PIN_SD_CS, SPI, 10000000)) {
         spdlog::error("sd card init failed");
         _is_sd_card_vaild = false;
         return false;
@@ -146,44 +145,37 @@ bool HAL_UnitCamS3_5MP::sdCardInit(bool passImagePath)
     _is_sd_card_vaild = true;
 
     // Path
-    if (passImagePath)
-    {
+    if (passImagePath) {
         spdlog::info("pass image path init, done");
         return true;
     }
 
     // Check path
-    if (!SD.exists(_img_save_path.path))
-    {
+    if (!SD.exists(_img_save_path.path)) {
         spdlog::info("no path: {}, try create..", _img_save_path.path);
-        if (!SD.mkdir(_img_save_path.path))
-        {
+        if (!SD.mkdir(_img_save_path.path)) {
             spdlog::error("create failed!");
             SD.end();
             return false;
         }
-    }
-    else
-    {
+    } else {
         spdlog::info("{} alreay exist", _img_save_path.path.c_str());
     }
 
     // Open path and iterate file names
-    File dir = SD.open(_img_save_path.path, "r");
+    File dir           = SD.open(_img_save_path.path, "r");
     uint32_t image_num = 0;
-    while (1)
-    {
+    while (1) {
         File file = dir.openNextFile();
-        if (!file)
-        {
+        if (!file) {
             image_num++;
             break;
         }
 
         // Get image num from file name
         String name = file.name();
-        image_num = name.substring(name.indexOf(_img_save_path.prefix) + _img_save_path.prefix.length(),
-                                   name.indexOf(_img_save_path.extension))
+        image_num   = name.substring(name.indexOf(_img_save_path.prefix) + _img_save_path.prefix.length(),
+                                     name.indexOf(_img_save_path.extension))
                         .toInt();
     }
 
@@ -195,9 +187,15 @@ bool HAL_UnitCamS3_5MP::sdCardInit(bool passImagePath)
     return true;
 }
 
-bool HAL_UnitCamS3_5MP::sdCardDeInit() { return false; }
+bool HAL_UnitCamS3_5MP::sdCardDeInit()
+{
+    return false;
+}
 
-bool HAL_UnitCamS3_5MP::isSdCardVaild() { return _is_sd_card_vaild; }
+bool HAL_UnitCamS3_5MP::isSdCardVaild()
+{
+    return _is_sd_card_vaild;
+}
 
 bool HAL_UnitCamS3_5MP::saveImage(uint8_t* img, size_t size)
 {
@@ -205,13 +203,10 @@ bool HAL_UnitCamS3_5MP::saveImage(uint8_t* img, size_t size)
 
     // Save
     File file = SD.open(_img_save_path.getSavePath(), "w", true);
-    if (file)
-    {
+    if (file) {
         file.write(img, size);
         file.close();
-    }
-    else
-    {
+    } else {
         spdlog::error("open {} failed!", _img_save_path.getSavePath());
         return false;
     }

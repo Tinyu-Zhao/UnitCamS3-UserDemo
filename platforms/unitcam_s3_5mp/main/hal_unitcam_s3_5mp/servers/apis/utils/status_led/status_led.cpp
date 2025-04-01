@@ -12,7 +12,7 @@
 #include <hal/hal.h>
 
 static SemaphoreHandle_t _semaphore_led_state = NULL;
-static LedState_t _led_state = led_state_waiting;
+static LedState_t _led_state                  = led_state_waiting;
 
 LedState_t StatusLed::GetState()
 {
@@ -39,32 +39,25 @@ static void _led_blink()
 
 static void _task_led(void* param)
 {
-    LedState_t led_state = led_state_waiting;
+    LedState_t led_state      = led_state_waiting;
     uint32_t state_time_count = 0;
-    uint32_t led_time_count = 0;
+    uint32_t led_time_count   = 0;
 
-    while (1)
-    {
+    while (1) {
         // Update state
-        if (millis() - state_time_count > 1000)
-        {
-            led_state = StatusLed::GetState();
+        if (millis() - state_time_count > 1000) {
+            led_state        = StatusLed::GetState();
             state_time_count = millis();
         }
 
         // Update led
-        if (led_state == led_state_waiting)
-        {
-            if (millis() - led_time_count > 2000)
-            {
+        if (led_state == led_state_waiting) {
+            if (millis() - led_time_count > 2000) {
                 _led_blink();
                 led_time_count = millis();
             }
-        }
-        else
-        {
-            if (millis() - led_time_count > 500)
-            {
+        } else {
+            if (millis() - led_time_count > 500) {
                 _led_blink();
                 delay(50);
                 _led_blink();

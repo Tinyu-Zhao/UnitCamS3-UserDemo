@@ -11,15 +11,13 @@
 #pragma once
 #include <Arduino.h>
 
-enum LedState_t
-{
+enum LedState_t {
     led_state_waiting = 0,
     led_state_posting,
 };
 
-namespace StatusLed
-{
-    void Start();
-    LedState_t GetState();
-    void SetState(LedState_t state);
-}; // namespace StatusLed
+namespace StatusLed {
+void Start();
+LedState_t GetState();
+void SetState(LedState_t state);
+};  // namespace StatusLed

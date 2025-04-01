@@ -40,8 +40,7 @@ void HAL_UnitCamS3_5MP::_gamepad_init()
 
 bool HAL_UnitCamS3_5MP::getButton(GAMEPAD::GamePadButton_t button)
 {
-    if (button == GAMEPAD::BTN_A)
-        return !gpio_get_level((gpio_num_t)HAL_PIN_BUTTON_A);
+    if (button == GAMEPAD::BTN_A) return !gpio_get_level((gpio_num_t)HAL_PIN_BUTTON_A);
     return false;
 }
 

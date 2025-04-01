@@ -38,8 +38,7 @@ void APP::Setup(SetupCallback_t callback)
     spdlog::info("shared data injection:");
     if (callback.sharedDataInjection != nullptr)
         callback.sharedDataInjection();
-    else
-    {
+    else {
         spdlog::info("empty callback, inject type base");
         SharedData::Inject(new SharedData);
     }

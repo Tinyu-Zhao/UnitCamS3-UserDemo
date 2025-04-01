@@ -26,15 +26,13 @@ AssetPool* AssetPool::_asset_pool = nullptr;
 
 AssetPool* AssetPool::Get()
 {
-    if (_asset_pool == nullptr)
-        _asset_pool = new AssetPool;
+    if (_asset_pool == nullptr) _asset_pool = new AssetPool;
     return _asset_pool;
 }
 
 StaticAsset_t* AssetPool::getStaticAsset()
 {
-    if (_data.static_asset == nullptr)
-    {
+    if (_data.static_asset == nullptr) {
         spdlog::error("static asset not exsit");
         return nullptr;
     }
@@ -43,14 +41,12 @@ StaticAsset_t* AssetPool::getStaticAsset()
 
 bool AssetPool::injectStaticAsset(StaticAsset_t* asset)
 {
-    if (_data.static_asset != nullptr)
-    {
+    if (_data.static_asset != nullptr) {
         spdlog::error("static asset already exist");
         return false;
     }
 
-    if (asset == nullptr)
-    {
+    if (asset == nullptr) {
         spdlog::error("invalid static asset ptr");
         return false;
     }
@@ -91,11 +87,17 @@ void AssetPool::loadFont14(LGFX_SpriteFx* lgfxDevice)
     //     ...
 }
 
-void AssetPool::loadFont16(LGFX_SpriteFx* lgfxDevice) {}
+void AssetPool::loadFont16(LGFX_SpriteFx* lgfxDevice)
+{
+}
 
-void AssetPool::loadFont24(LGFX_SpriteFx* lgfxDevice) {}
+void AssetPool::loadFont24(LGFX_SpriteFx* lgfxDevice)
+{
+}
 
-void AssetPool::loadFont72(LGFX_SpriteFx* lgfxDevice) {}
+void AssetPool::loadFont72(LGFX_SpriteFx* lgfxDevice)
+{
+}
 
 /* -------------------------------------------------------------------------- */
 /*                            Static asset generate                           */
@@ -115,8 +117,7 @@ static bool _copy_file(std::string filePath, uint8_t* target)
     spdlog::info("try open {}", filePath);
 
     std::ifstream file(filePath, std::ios::binary | std::ios::ate);
-    if (!file.is_open())
-    {
+    if (!file.is_open()) {
         spdlog::error("open failed!", filePath);
         return false;
     }
@@ -125,8 +126,7 @@ static bool _copy_file(std::string filePath, uint8_t* target)
     spdlog::info("file binary size {}", file_size);
 
     // Copy and go
-    if (target != nullptr)
-        file.read(reinterpret_cast<char*>(target), file_size);
+    if (target != nullptr) file.read(reinterpret_cast<char*>(target), file_size);
     file.close();
     return true;
 }
@@ -148,8 +148,7 @@ static bool _copy_png_image(std::string filePath, uint16_t* target)
 
     ImageConversionError result = convertPNGToR5G6B5(filePath.c_str(), target, &output_length, &width, &height);
 
-    if (result != ImageConversionError::Success)
-    {
+    if (result != ImageConversionError::Success) {
         spdlog::error("convert failed: {}", static_cast<int>(result));
         return false;
     }
@@ -197,8 +196,7 @@ void AssetPool::CreateStaticAssetBin(StaticAsset_t* assetPool)
     std::string bin_path = "AssetPool.bin";
 
     std::ofstream outFile(bin_path, std::ios::binary);
-    if (!outFile)
-        spdlog::error("open {} failed", bin_path);
+    if (!outFile) spdlog::error("open {} failed", bin_path);
 
     outFile.write(reinterpret_cast<const char*>(assetPool), sizeof(StaticAsset_t));
     outFile.close();
@@ -213,8 +211,7 @@ StaticAsset_t* AssetPool::GetStaticAssetFromBin()
     std::string bin_path = "AssetPool.bin";
 
     std::ifstream inFile(bin_path, std::ios::binary);
-    if (!inFile)
-        spdlog::error("open {} failed", bin_path);
+    if (!inFile) spdlog::error("open {} failed", bin_path);
 
     inFile.read(reinterpret_cast<char*>(asset_pool), sizeof(StaticAsset_t));
     inFile.close();
@@ -223,7 +220,8 @@ StaticAsset_t* AssetPool::GetStaticAssetFromBin()
     // for (int i = 0; i < 10; i++)
     // {
     //     spdlog::info(
-    //         "0x{:X} 0x{:X}", asset_pool->Font.montserrat_semibold_14[i], asset_pool->Font.montserrat_semibolditalic_72[i]);
+    //         "0x{:X} 0x{:X}", asset_pool->Font.montserrat_semibold_14[i],
+    //         asset_pool->Font.montserrat_semibolditalic_72[i]);
     // }
 
     spdlog::info("load asset pool from: {}", bin_path);

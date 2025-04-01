@@ -46,8 +46,7 @@ inline void app_install_default_startup_app(MOONCAKE::Mooncake* mooncake)
     // app_packers.push_back(new MOONCAKE::APPS::AppFactoryTest_Packer);
     // app_packers.push_back(new MOONCAKE::APPS::AppUserDemo_Packer);
 
-    for (const auto& i : app_packers)
-    {
+    for (const auto& i : app_packers) {
         mooncake->installApp(i);
         mooncake->createAndStartApp(i);
     }
